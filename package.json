@@ -1,0 +1,16 @@
+{
+  "name": "imagesyncapp",
+  "version": "1.0.0",
+  "description": "Electron app to sync image metadata locally",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "electron": "^29.4.6"
+  },
+  "keywords": []
+}
