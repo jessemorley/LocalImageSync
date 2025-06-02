@@ -1,8 +1,32 @@
 body {
   font-family: sans-serif;
   padding: 2rem;
+  background: #fafafa;
 }
+
 button {
   font-size: 1rem;
   padding: 0.5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.grid-item {
+  background: #fff;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.grid-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }

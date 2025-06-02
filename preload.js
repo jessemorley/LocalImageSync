@@ -1,5 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  startSync: (folderPath) => ipcRenderer.send('start-sync', folderPath),
+  startSync: () => ipcRenderer.send('start-sync'),
+  requestMetadata: () => ipcRenderer.invoke('get-metadata')
 });
+
+console.log("✅ Preload loaded");
