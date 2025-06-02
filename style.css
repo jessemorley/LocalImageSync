@@ -60,13 +60,12 @@ h1 {
   border: 1px solid #000;
   background: #fff;
   cursor: pointer;
-  aspect-ratio: 4 / 5; /* Total container includes label */
-  overflow: hidden;
+  /* Remove fixed aspect-ratio from container */
 }
 
 .image-wrapper {
+  aspect-ratio: 4 / 5;
   width: 100%;
-  height: 85%;
   overflow: hidden;
 }
 
@@ -78,22 +77,17 @@ h1 {
 }
 
 .label {
-  height: 15%;
-  font-size: clamp(1rem, 2vw, 1.5rem); /* Scales reasonably */
-  padding-inline: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  padding: 0.5rem;
+  text-align: center;
   border-top: 1px solid #000;
   background: #fff;
-  text-align: center;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: normal;       /* allow wrapping */
+  overflow-wrap: break-word; /* force breaks if needed */
+  line-height: 1.2;
 }
-
-
 
 
 .back-btn {
@@ -104,4 +98,43 @@ h1 {
   cursor: pointer;
   color: #000;
   text-decoration: underline;
+}
+
+/* Folder (initial) view still uses .grid-container */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0;
+}
+
+/* Masonry layout used only when inside a folder */
+.masonry {
+  column-count: 2;
+  column-gap: 0;
+  font-size: 0; /* remove inline-block spacing */
+}
+
+@media (min-width: 600px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+@media (min-width: 1000px) {
+  .masonry {
+    column-count: 4;
+  }
+}
+
+.masonry-item {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin-bottom: 0;
+  font-size: initial;
+}
+
+.masonry-item img {
+  width: 100%;
+  display: block;
+  border: 1px solid #000;
 }

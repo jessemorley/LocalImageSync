@@ -6,13 +6,13 @@ window.addEventListener('DOMContentLoaded', () => {
     window.electronAPI.startSync();
   });
 
-  // Store current folder and re-render when searching
   let currentFolder = null;
   let allMetadata = {};
 
   function renderGrid(folder = null, searchTerm = '') {
     const container = document.getElementById('imageGrid');
     container.innerHTML = '';
+    container.className = folder ? 'masonry' : 'grid-container';
 
     const entries = Object.values(allMetadata);
     if (entries.length === 0) {
@@ -33,7 +33,6 @@ window.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // Group by photographer
     const grouped = {};
     for (const entry of filteredEntries) {
       if (!grouped[entry.photographer]) {
@@ -42,7 +41,6 @@ window.addEventListener('DOMContentLoaded', () => {
       grouped[entry.photographer].push(entry);
     }
 
-    // Show one image per folder, or all images in a folder
     for (const [photographer, images] of Object.entries(grouped)) {
       const toShow = folder ? images : [images[0]];
 
@@ -53,31 +51,33 @@ window.addEventListener('DOMContentLoaded', () => {
         img.title = entry.photographer;
         img.className = 'grid-image';
 
-        const label = document.createElement('div');
-        label.className = 'label';
-        label.textContent = entry.photographer;
-
         const imageWrapper = document.createElement('div');
         imageWrapper.className = 'image-wrapper';
         imageWrapper.appendChild(img);
 
         const wrapper = document.createElement('div');
-        wrapper.className = 'grid-item';
+        wrapper.className = folder ? 'masonry-item' : 'grid-item';
         wrapper.appendChild(imageWrapper);
-        if (!folder) wrapper.appendChild(label);
 
-        wrapper.onclick = () => {
-        if (!folder) renderGrid(entry.photographer);
-        };
+        if (!folder) {
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.textContent = entry.photographer;
+          wrapper.appendChild(label);
+
+          wrapper.onclick = () => {
+            currentFolder = entry.photographer;
+            renderGrid(currentFolder, searchInput.value);
+          };
+        }
 
         container.appendChild(wrapper);
-
       }
     }
 
     if (folder) {
       const backBtn = document.createElement('button');
-      backBtn.textContent = '← Back';
+      backBtn.textContent = '← Back to folders';
       backBtn.className = 'back-btn';
       backBtn.onclick = () => {
         currentFolder = null;
@@ -87,7 +87,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Store metadata once at startup
   window.electronAPI.requestMetadata().then(metadata => {
     allMetadata = metadata;
     renderGrid();
