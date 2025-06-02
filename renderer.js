@@ -2,17 +2,28 @@ window.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('syncBtn');
   const searchInput = document.getElementById('searchInput');
 
+  let currentFolder = null;
+  let allMetadata = {};
+  let currentLayout = 'masonry';
+
+  // Handle layout switch buttons
+  document.querySelectorAll('#layoutControls button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLayout = btn.dataset.layout;
+      renderGrid(currentFolder, searchInput.value);
+    });
+  });
+
   btn.addEventListener('click', () => {
     window.electronAPI.startSync();
   });
 
-  let currentFolder = null;
-  let allMetadata = {};
-
   function renderGrid(folder = null, searchTerm = '') {
     const container = document.getElementById('imageGrid');
     container.innerHTML = '';
-    container.className = folder ? 'masonry' : 'grid-container';
+    container.className = folder
+      ? (currentLayout === 'column' ? 'single-column' : 'masonry')
+      : 'grid-container';
 
     const entries = Object.values(allMetadata);
     if (entries.length === 0) {
@@ -41,7 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
       grouped[entry.photographer].push(entry);
     }
 
-    for (const [photographer, images] of Object.entries(grouped)) {
+    const groupedEntries = Object.entries(grouped);
+
+    for (const [photographer, images] of groupedEntries) {
       const toShow = folder ? images : [images[0]];
 
       for (const entry of toShow) {

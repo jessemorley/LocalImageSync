@@ -8,9 +8,11 @@
 <body>
   <button id="syncBtn">Choose Folder</button>
   <input type="text" id="searchInput" placeholder="Search photographer..." />
-
+  <div id="layoutControls">
+  <button data-layout="masonry">🧱 Masonry</button>
+  <button data-layout="column">📄 Single Column</button>
+  </div>
   <div id="imageGrid" class="grid-container"></div>
-
   <script src="renderer.js"></script>
 </body>
 </html>
